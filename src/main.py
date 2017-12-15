@@ -9,6 +9,12 @@ import requests
 import pifacecad
 import os
 
+def print_instructions_raspi():
+    cad.lcd.clear()
+    cad.lcd.set_cursor(0, 0)
+    cad.lcd.write("S0 read QR\n")
+    cad.lcd.write("S2 shut down")
+    
 def print_instructions():
     print "Switch 0: Scan qrcode and create attendance"
     print "Switch 2: exit"
@@ -31,7 +37,7 @@ def read_qrcode(event):
     cad.lcd.write(str(r.status_code))
     cad.lcd.write("\nDONE")
     print_instructions()
-  
+    print_instructions_raspi()  
     
 cad = pifacecad.PiFaceCAD()# get an object for the display
 cad.lcd.backlight_on() # turns the backlight on
@@ -40,7 +46,7 @@ listener = pifacecad.SwitchEventListener(chip=cad)
 listener.register(0, pifacecad.IODIR_FALLING_EDGE, read_qrcode)
 listener.register(2, pifacecad.IODIR_FALLING_EDGE, finish_aplication)
 listener.activate()
-
+print_instructions_raspi()
 print_instructions()
 #    if cad.switches[0].value == 1:
 #    elif cad.switches[2].value == 1:
